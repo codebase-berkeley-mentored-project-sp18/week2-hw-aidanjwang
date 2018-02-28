@@ -11,13 +11,26 @@ You can test your function by opening index.html in your browser and viewing the
 */
 
 function getElementsByClassName(strClassName) {
-  //=====================
-  // YOUR CODE HERE
-  //=====================
-  return;
+  return helper(document.body, strClassName);
 }
 
+/*
+A helper function for getElementsByClassName. Checks if the given element and
+its childNodes have the given class name, and returns all that do, recursively.
+*/
+function helper(element, strClassName) {
+	var answer = [];
+	var classes = element.classList;
+	if (classes.length !== 0 && classes.contains(strClassName)) {
+		answer.push(element);
+	}
 
+	var children = element.children;
+	for (var i = 0; i < children.length; i++) {
+		Array.prototype.push.apply(answer,helper(children.item(i), strClassName));
+	}
+	return answer;
+}
 
 
 

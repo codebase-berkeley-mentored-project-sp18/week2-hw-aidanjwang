@@ -20,8 +20,11 @@ addMessage("Player " + player + " it is your turn!", "standard");
 // Events
 // -----------------------------------------------------------------
 
-// TODO: add the setSpot function to be the event to each "spot"
-
+var handleClick = function(e) {setSpot(e); };
+var spots = document.getElementsByClassName("spot");
+[].forEach.call(spots, function(element) {
+  element.addEventListener("click", handleClick);
+});
 
 // -----------------------------------------------------------------
 // DOM Interaction
@@ -30,15 +33,15 @@ addMessage("Player " + player + " it is your turn!", "standard");
 /* Upon receiving a valid selection this function
    adds the piece to the JavaScript board and the
    HTML board */
-function setSpot() {
-	// TODO: assign id to be the id of the element that got selected
-	var row = getRow(id);
+function setSpot(e) {
+  	var id = e.target.id;
+ 	var row = getRow(id);
 	var col = getCol(id);
 
 	if (board[row][col] === '-') {
 		board[row][col] = player;
-		// TODO: add the player to the HTML board too (this is not the same as the 2D array)
-		
+		e.target.innerHTML = player;
+    
 		validInput = true;
 		moves += 1;
 		player = switchPlayer();
@@ -49,7 +52,9 @@ function setSpot() {
 
 		if (winner) {
 			addMessage("Congratulations, " + switchPlayer() + " you won!", "endgame");
-			// TODO: remove the event listener from every spot
+			[].forEach.call(spots, function(element) {
+				element.removeEventListener("click", handleClick);
+			})
 		} else if (moves === 9) {
 			addMessage("You both suck, it's a tie!", "endgame");
 		}
@@ -58,9 +63,10 @@ function setSpot() {
 
 function addMessage(message, c) {
 	// change the message and assign the class c to the message paragraph
+	var element = document.getElementById("message")
+	element.innerHTML = message;
+	element.classList.add(c);
 }
-
-
 
 //---------------------------------------------------------------------------------
 // Helpers
@@ -102,16 +108,11 @@ function isWinner() {
 }
 
 function getRow(id) {
-	// TODO: given the id (a string, return the row)
+	var parsed = parseInt(id);
+  return Math.floor(parsed / 10);
 }
 
 function getCol(id) {
-	// TODO: given the id (a string, return the col)
+	var parsed = parseInt(id);
+  return parsed % 10;
 }
-
-
-
-
-
-
-
